@@ -1,74 +1,74 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DotnetDemoapp.Pages
+namespace DotnetDemoapp.Pages;
+
+public class ToolsModel : PageModel
 {
-    public class ToolsModel : PageModel
+    public string Message { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// Multi purpose controller method for various tool actions
+    /// </summary>
+    public void OnGet(string? action, int value = 0)
     {
-        public string Message { get; private set; } = "";
-
-        // Multi purpose controller method, 
-        // Couldn't find a way to do this with routes/annotations in Razor Pages
-        public void OnGet(string action, int value)
+        Message = action switch
         {
-            // Run the garbage collector
-            if (action == "gc")
-            {
-                GC.Collect();
-                Message = "Garbage collection was run";
-            }
+            "gc" => RunGarbageCollection(),
+            "alloc" => AllocateMemory(value),
+            "exception" => throw new InvalidOperationException("Cheese not found"),
+            "load" => GenerateCpuLoad(value),
+            _ => string.Empty
+        };
+    }
 
-            // Try to allocate some memory
-            if (action == "alloc")
-            {
-                var MB_SIZE = 50;
-                if (value > 0)
-                {
-                    MB_SIZE = value;
-                }
+    /// <summary>
+    /// Run garbage collection
+    /// </summary>
+    private static string RunGarbageCollection()
+    {
+        GC.Collect();
+        return "Garbage collection was run";
+    }
 
-                try
-                {
-                    var stringArray = new double[MB_SIZE * 1024 * 1000];
-                    Message = "Allocated array with space for " + (MB_SIZE * 1024 * 1000) + " doubles";
-                }
-                catch (Exception ex)
-                {
-                    Message = "Failed " + ex.ToString();
-                }
-            }
+    /// <summary>
+    /// Allocate memory
+    /// </summary>
+    private static string AllocateMemory(int value)
+    {
+        var mbSize = value > 0 ? value : 50;
 
-            // Just throw an exception
-            if (action == "exception")
-            {
-                throw new InvalidOperationException("Cheese not found");
-            }
-
-            // Force some CPU load in a loop
-            if (action == "load")
-            {
-                double time;
-                long loops;
-                const double pow_base = 9000000000;
-                const double pow_exponent = 9000000000;
-                const int default_loops = 20;
-
-                var sw = new Stopwatch();
-                sw.Start();
-                loops = default_loops;
-                if (value > 0)
-                {
-                    loops = value;
-                }
-
-                for (var i = 0; i <= loops * 1000000; i++)
-                {
-                    _ = Math.Pow(pow_base, pow_exponent);
-                }
-
-                time = sw.ElapsedMilliseconds / 1000.0;
-                Message = $"I calculated a really big number {loops} million times! It took {time} seconds!";
-            }
+        try
+        {
+            var stringArray = new double[mbSize * 1024 * 1000];
+            return $"Allocated array with space for {mbSize * 1024 * 1000} doubles";
         }
+        catch (Exception ex)
+        {
+            return $"Failed: {ex}";
+        }
+    }
+
+    /// <summary>
+    /// Generate CPU load
+    /// </summary>
+    private static string GenerateCpuLoad(int value)
+    {
+        const double powBase = 9000000000;
+        const double powExponent = 9000000000;
+        const int defaultLoops = 20;
+
+        var sw = new Stopwatch();
+        sw.Start();
+        
+        var loops = value > 0 ? value : defaultLoops;
+
+        for (var i = 0; i <= loops * 1000000; i++)
+        {
+            _ = Math.Pow(powBase, powExponent);
+        }
+
+        var time = sw.ElapsedMilliseconds / 1000.0;
+        return $"I calculated a really big number {loops} million times! It took {time} seconds!";
     }
 }
