@@ -1,24 +1,23 @@
 using Xunit;
 
-namespace DotnetDemoapp_tests
-{
-    public class LameUnitTest1
-    {
-        [Fact]
-        public void TestAThingFalse()
-        {
-            bool result = false;
-            Assert.False(result, $"{result} should not be true");
-        }
-    }
+namespace DotnetDemoapp_tests;
 
-    public class LameUnitTest2
+public class LameUnitTest1
+{
+    [Fact]
+    public void TestAThingFalse()
     {
-        [Fact]
-        public void TestAThingTrue()
-        {
-            bool result = true;
-            Assert.True(result, $"{result} should not be false");
-        }
+        bool result = false;
+        Assert.False(result, $"{result} should not be true");
+    }
+}
+
+public class LameUnitTest2
+{
+    [Fact]
+    public void TestAThingTrue()
+    {
+        bool result = true;
+        Assert.True(result, $"{result} should not be false");
     }
 }
