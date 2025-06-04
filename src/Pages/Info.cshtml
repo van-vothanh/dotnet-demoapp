@@ -8,7 +8,7 @@
   <div class="card-body">
     <h3>Basic Details</h3>
 
-    <table class="table table-hover table-striped table">
+    <table class="table table-hover table-striped">
       <tr>
         <td><i class="fa fa-fw fa-cube"></i> Containerized:</td>
         @if (Model.IsInContainer)
@@ -68,17 +68,19 @@
 
     <h3>Environment Variables</h3>
 
-    <table class="table text-success bg-dark env-table">
-      <tbody>
-        @foreach (KeyValuePair<string, string> var in @Model.EnvVars)
-        {
-          @if (var.Key == "PATH") continue;
-          <tr>
-            <td class=""> @var.Key </td>
-            <td class=""> @var.Value </td>
-          </tr>
-        }
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table text-success bg-dark env-table">
+        <tbody>
+          @foreach (KeyValuePair<string, string> var in @Model.EnvVars)
+          {
+            @if (var.Key == "PATH") continue;
+            <tr>
+              <td> @var.Key </td>
+              <td> @var.Value </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
