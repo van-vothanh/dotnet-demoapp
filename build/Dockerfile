@@ -2,7 +2,7 @@
 # Stage 1 - Build/compile app using container
 # =======================================================
 
-ARG IMAGE_BASE=6.0-alpine
+ARG IMAGE_BASE=8.0-alpine
 
 # Build image has SDK and tools (Linux)
 FROM mcr.microsoft.com/dotnet/sdk:$IMAGE_BASE as build
@@ -24,8 +24,8 @@ RUN dotnet publish --no-restore --configuration Release
 FROM mcr.microsoft.com/dotnet/aspnet:$IMAGE_BASE
 
 # Metadata in Label Schema format (http://label-schema.org)
-LABEL org.label-schema.name    = ".NET Core Demo Web App" \
-      org.label-schema.version = "1.5.0" \
+LABEL org.label-schema.name    = ".NET Demo Web App" \
+      org.label-schema.version = "2.0.0" \
       org.label-schema.vendor  = "Ben Coleman" \
       org.opencontainers.image.source = "https://github.com/benc-uk/dotnet-demoapp"
 
@@ -33,7 +33,7 @@ LABEL org.label-schema.name    = ".NET Core Demo Web App" \
 WORKDIR /app
 
 # Copy already published binaries (from build stage image)
-COPY --from=build /build/src/bin/Release/net6.0/publish/ .
+COPY --from=build /build/src/bin/Release/net8.0/publish/ .
 
 # Expose port 5000 from Kestrel webserver
 EXPOSE 5000
@@ -44,5 +44,9 @@ ENV ASPNETCORE_ENVIRONMENT Production
 # This is critical for the Azure AD signin flow to work in Kubernetes and App Service
 ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
 
+# Health check to ensure container is ready
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD wget -q --spider http://localhost:5000/health || exit 1
+
 # Run the ASP.NET Core app
-ENTRYPOINT dotnet dotnet-demoapp.dll
+ENTRYPOINT ["dotnet", "dotnet-demoapp.dll"]
