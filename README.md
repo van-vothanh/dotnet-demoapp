@@ -1,10 +1,12 @@
-# .NET - Demo Web Application
+# .NET 8 - Demo Web Application
 
-This is a simple .NET web app using the new minimal hosting model, and Razor pages. It was created from the `dotnet new webapp` template and modified adding custom APIs, Bootstrap v5, Microsoft Identity and other packages/features.
+This is a simple .NET 8 web app using the minimal hosting model and Razor pages. It was created from the `dotnet new webapp` template and modified adding custom APIs, Bootstrap v5, Microsoft Identity and other packages/features.
 
 The app has been designed with cloud native demos & containers in mind, in order to provide a real working application for deployment, something more than "hello-world" but with the minimum of pre-reqs. It is not intended as a complete example of a fully functioning architecture or complex software design.
 
 Typical uses would be deployment to Kubernetes, demos of Docker, CI/CD (build pipelines are provided), deployment to cloud (Azure) monitoring, auto-scaling
+
+## Features
 
 The app has several basic pages accessed from the top navigation menu, some of which are only lit up when certain configuration variables are set (see 'Optional Features' below):
 
@@ -31,7 +33,7 @@ Live instances:
 ### Pre-reqs
 
 - Be using Linux, WSL or MacOS, with bash, make etc
-- [.NET 6](https://docs.microsoft.com/en-us/dotnet/core/install/linux) - for running locally, linting, running tests etc
+- [.NET 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) - for running locally, linting, running tests etc
 - [Docker](https://docs.docker.com/get-docker/) - for running as a container, or image build and push
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-linux) - for deployment to Azure
 
@@ -41,49 +43,30 @@ Clone the project to any directory where you do development work
 git clone https://github.com/benc-uk/dotnet-demoapp.git
 ```
 
-### Makefile
+### Running Locally
 
-A standard GNU Make file is provided to help with running and building locally.
-
-```txt
-$ make
-
-help                 💬 This help message
-lint                 🔎 Lint & format, will not fix but sets exit code on error
-image                🔨 Build container image from Dockerfile
-push                 📤 Push container image to registry
-run                  🏃‍ Run locally using Dotnet CLI
-deploy               🚀 Deploy to Azure Container App
-undeploy             💀 Remove from Azure
-test                 🎯 Unit tests with xUnit
-test-report          🤡 Unit tests with xUnit & output report
-clean                🧹 Clean up project
-```
-
-Make file variables and default values, pass these in when calling `make`, e.g. `make image IMAGE_REPO=blah/foo`
-
-| Makefile Variable | Default                |
-| ----------------- | ---------------------- |
-| IMAGE_REG         | ghcr<span>.</span>io   |
-| IMAGE_REPO        | benc-uk/dotnet-demoapp |
-| IMAGE_TAG         | latest                 |
-| AZURE_RES_GROUP   | demoapps               |
-| AZURE_REGION      | northeurope            |
-| AZURE_APP_NAME    | dotnet-demoapp         |
-
-Web app will listen on the usual Kestrel port of 5000, but this can be changed by setting the `ASPNETCORE_URLS` environmental variable or with the `--urls` parameter ([see docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?view=aspnetcore-6.0)).
-
-# Containers
-
-Public container image is [available on GitHub Container Registry](https://github.com/users/benc-uk/packages/container/package/dotnet-demoapp).
-
-Run in a container with:
+To run the application locally:
 
 ```bash
-docker run --rm -it -p 5000:5000 ghcr.io/benc-uk/dotnet-demoapp:latest
+cd src
+dotnet run
 ```
 
-Should you want to build your own container, use `make image` and the above variables to customise the name & tag.
+The app will be available at http://localhost:5000
+
+### Building and Running with Docker
+
+Build the Docker image:
+
+```bash
+docker build -t dotnet-demoapp -f build/Dockerfile .
+```
+
+Run the container:
+
+```bash
+docker run -p 5000:5000 dotnet-demoapp
+```
 
 ## Kubernetes
 
@@ -164,20 +147,39 @@ If running locally, and using appsettings.Development.json, this can be configur
 }
 ```
 
+## Security Considerations
+
+This application has been updated with several security enhancements:
+
+- Nullable reference types enabled to prevent null reference exceptions
+- HTTP client factory used for better resource management
+- Exception handling added to API calls
+- Input validation for API parameters
+- Updated to latest package versions to address security vulnerabilities
+- HTTPS redirection in production environments
+
+## Performance Improvements
+
+The application includes several performance optimizations:
+
+- Modern .NET 8 runtime with improved performance
+- HTTP client factory for efficient connection pooling
+- Proper exception handling to prevent application crashes
+- Updated dependencies to latest versions for better performance
+
 ## Running in Azure - Container App
 
 If you want to deploy to an Azure Container App, a Bicep template is provided in the [deploy](deploy/) directory
 
-For a quick deployment, use `make deploy` which will create a resource group, the Azure Container App instance (with supporting resources) and deploy the latest image to it
+For a quick deployment, use the Azure CLI:
 
 ```bash
-make deploy
+az deployment group create --resource-group myResourceGroup --template-file deploy/container-app.bicep --parameters name=dotnet-demoapp
 ```
-
-> Note. Azure Container App doesn't currently support HTTP header forwarding, so Azure AD sign-in will not work as it mis-redirects to the wrong URL
 
 # Updates
 
+- Jun 2025 - Updated to .NET 8, modernized code, improved security and performance
 - Nov 2021 - Large scale rewrite to .NET 6
 - Mar 2021 - Update to deployment, added dummy unit tests and makefile
 - Nov 2020 - Updated to .NET 5
