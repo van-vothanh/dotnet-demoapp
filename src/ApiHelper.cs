@@ -1,22 +1,52 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
+using System.Text.Json;
 
 namespace DotnetDemoapp
 {
-    // Simple static methods to help with the API calls
-    // These could probably be made into full HTTP handlers
-    public class ApiHelper
+    /// <summary>
+    /// Helper class for API calls and system monitoring
+    /// </summary>
+    public static class ApiHelper
     {
-        public static async Task<(int, string)> GetOpenWeather(string apiKey, double posLat, double posLong)
+        /// <summary>
+        /// Gets weather data from OpenWeather API
+        /// </summary>
+        /// <param name="apiKey">OpenWeather API key</param>
+        /// <param name="posLat">Latitude</param>
+        /// <param name="posLong">Longitude</param>
+        /// <param name="httpClientFactory">HttpClient factory for better management of HttpClient instances</param>
+        /// <returns>Tuple containing status code and response content</returns>
+        public static async Task<(int, string)> GetOpenWeather(string apiKey, double posLat, double posLong, IHttpClientFactory httpClientFactory)
         {
-            // Call the OpenWeather API with provided lat & long
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.openweathermap.org/data/2.5/weather?lat={posLat}&lon={posLong}&appid={apiKey}&units=metric");
-            // This is not the best way to use HttpClient, but good enough
-            using var client = new HttpClient();
-            var response = await client.SendAsync(request);
-
-            return response.IsSuccessStatusCode ? (200, await response.Content.ReadAsStringAsync()) : ((int)response.StatusCode, null);
+            try
+            {
+                // Use HttpClientFactory to get a client - better practice than creating new instances
+                var client = httpClientFactory.CreateClient("OpenWeatherAPI");
+                client.Timeout = TimeSpan.FromSeconds(10);
+                
+                // Build the request URL with proper encoding
+                var requestUri = $"https://api.openweathermap.org/data/2.5/weather?lat={posLat}&lon={posLong}&appid={apiKey}&units=metric";
+                
+                // Make the API call
+                var response = await client.GetAsync(requestUri);
+                
+                // Return the status code and content
+                return response.IsSuccessStatusCode 
+                    ? (200, await response.Content.ReadAsStringAsync()) 
+                    : ((int)response.StatusCode, null);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (in a real app, use proper logging)
+                Console.WriteLine($"Error calling OpenWeather API: {ex.Message}");
+                return (500, JsonSerializer.Serialize(new { error = "Failed to fetch weather data", message = ex.Message }));
+            }
         }
 
+        /// <summary>
+        /// Calculates CPU usage for the current process
+        /// </summary>
+        /// <returns>CPU usage percentage</returns>
         public static async Task<double> GetCpuUsageForProcess()
         {
             var startTime = DateTime.UtcNow;
