@@ -1,6 +1,6 @@
-# .NET - Demo Web Application
+# .NET 8 - Demo Web Application
 
-This is a simple .NET web app using the new minimal hosting model, and Razor pages. It was created from the `dotnet new webapp` template and modified adding custom APIs, Bootstrap v5, Microsoft Identity and other packages/features.
+This is a simple .NET web app using the minimal hosting model and Razor pages. It was created from the `dotnet new webapp` template and modified adding custom APIs, Bootstrap v5, Microsoft Identity and other packages/features.
 
 The app has been designed with cloud native demos & containers in mind, in order to provide a real working application for deployment, something more than "hello-world" but with the minimum of pre-reqs. It is not intended as a complete example of a fully functioning architecture or complex software design.
 
@@ -31,7 +31,7 @@ Live instances:
 ### Pre-reqs
 
 - Be using Linux, WSL or MacOS, with bash, make etc
-- [.NET 6](https://docs.microsoft.com/en-us/dotnet/core/install/linux) - for running locally, linting, running tests etc
+- [.NET 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) - for running locally, linting, running tests etc
 - [Docker](https://docs.docker.com/get-docker/) - for running as a container, or image build and push
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-linux) - for deployment to Azure
 
@@ -71,7 +71,7 @@ Make file variables and default values, pass these in when calling `make`, e.g. 
 | AZURE_REGION      | northeurope            |
 | AZURE_APP_NAME    | dotnet-demoapp         |
 
-Web app will listen on the usual Kestrel port of 5000, but this can be changed by setting the `ASPNETCORE_URLS` environmental variable or with the `--urls` parameter ([see docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?view=aspnetcore-6.0)).
+Web app will listen on the usual Kestrel port of 5000, but this can be changed by setting the `ASPNETCORE_URLS` environmental variable or with the `--urls` parameter ([see docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?view=aspnetcore-8.0)).
 
 # Containers
 
@@ -178,6 +178,7 @@ make deploy
 
 # Updates
 
+- Jun 2025 - Updated to .NET 8, modernized code, improved security and performance
 - Nov 2021 - Large scale rewrite to .NET 6
 - Mar 2021 - Update to deployment, added dummy unit tests and makefile
 - Nov 2020 - Updated to .NET 5
