@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Graph;
@@ -8,25 +8,22 @@ using Microsoft.Graph;
 
 namespace DotnetDemoapp.Pages
 {
+    /// <summary>
+    /// User information page model
+    /// </summary>
     [Authorize]
-    public class UserInfoModel : PageModel
+    public class UserInfoModel(ILogger<UserInfoModel> logger, GraphServiceClient graphServiceClient) : PageModel
     {
-        private readonly ILogger<UserInfoModel> _logger;
-        private readonly GraphServiceClient _graphServiceClient;
+        private readonly ILogger<UserInfoModel> _logger = logger;
+        private readonly GraphServiceClient _graphServiceClient = graphServiceClient;
 
-        public string Username { get; private set; } = "";
-        public string Oid { get; private set; } = "";
-        public string Name { get; private set; } = "";
-        public string TenantId { get; private set; } = "";
-        public string PreferredUsername { get; private set; } = "";
-        internal Dictionary<string, string> GraphData = new();
-        internal byte[] GraphPhoto;
-
-        public UserInfoModel(ILogger<UserInfoModel> logger, GraphServiceClient graphServiceClient)
-        {
-            _logger = logger;
-            _graphServiceClient = graphServiceClient;
-        }
+        public string Username { get; private set; } = string.Empty;
+        public string Oid { get; private set; } = string.Empty;
+        public string Name { get; private set; } = string.Empty;
+        public string TenantId { get; private set; } = string.Empty;
+        public string PreferredUsername { get; private set; } = string.Empty;
+        internal Dictionary<string, string> GraphData { get; } = [];
+        internal byte[]? GraphPhoto { get; private set; }
 
         public async Task<IActionResult> OnGet()
         {
@@ -50,7 +47,7 @@ namespace DotnetDemoapp.Pages
                 }
             }
 
-            Username = User.Identity.Name;
+            Username = User.Identity?.Name ?? string.Empty;
 
             // Graph stuff
             // Acquire the access token
@@ -61,13 +58,13 @@ namespace DotnetDemoapp.Pages
                 .Request()
                 .GetAsync();
 
-                GraphData.Add("UPN", graphDetails.UserPrincipalName);
-                GraphData.Add("Given Name", graphDetails.GivenName);
-                GraphData.Add("Display Name", graphDetails.DisplayName);
-                GraphData.Add("Office", graphDetails.OfficeLocation);
-                GraphData.Add("Mobile", graphDetails.MobilePhone);
-                GraphData.Add("Other Phone", graphDetails.BusinessPhones.Any() ? graphDetails.BusinessPhones.First() : "");
-                GraphData.Add("Job Title", graphDetails.JobTitle);
+                GraphData.Add("UPN", graphDetails.UserPrincipalName ?? string.Empty);
+                GraphData.Add("Given Name", graphDetails.GivenName ?? string.Empty);
+                GraphData.Add("Display Name", graphDetails.DisplayName ?? string.Empty);
+                GraphData.Add("Office", graphDetails.OfficeLocation ?? string.Empty);
+                GraphData.Add("Mobile", graphDetails.MobilePhone ?? string.Empty);
+                GraphData.Add("Other Phone", graphDetails.BusinessPhones.Any() ? graphDetails.BusinessPhones.First() : string.Empty);
+                GraphData.Add("Job Title", graphDetails.JobTitle ?? string.Empty);
 
                 // Fetch user photo, this used to fail with MSA accounts hence the extra try/catch
                 try
