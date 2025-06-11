@@ -2,21 +2,47 @@
 
 namespace DotnetDemoapp
 {
-    // Simple static methods to help with the API calls
-    // These could probably be made into full HTTP handlers
-    public class ApiHelper
+    /// <summary>
+    /// Helper class for API operations including weather data retrieval and CPU usage monitoring
+    /// </summary>
+    public static class ApiHelper
     {
-        public static async Task<(int, string)> GetOpenWeather(string apiKey, double posLat, double posLong)
+        /// <summary>
+        /// Retrieves weather data from OpenWeather API for the specified location
+        /// </summary>
+        /// <param name="client">HttpClient instance to use for the request</param>
+        /// <param name="apiKey">OpenWeather API key</param>
+        /// <param name="posLat">Latitude coordinate</param>
+        /// <param name="posLong">Longitude coordinate</param>
+        /// <returns>Tuple containing status code and response content</returns>
+        public static async Task<(int, string?)> GetOpenWeather(HttpClient client, string? apiKey, double posLat, double posLong)
         {
-            // Call the OpenWeather API with provided lat & long
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.openweathermap.org/data/2.5/weather?lat={posLat}&lon={posLong}&appid={apiKey}&units=metric");
-            // This is not the best way to use HttpClient, but good enough
-            using var client = new HttpClient();
-            var response = await client.SendAsync(request);
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                return (401, null);
+            }
 
-            return response.IsSuccessStatusCode ? (200, await response.Content.ReadAsStringAsync()) : ((int)response.StatusCode, null);
+            try
+            {
+                // Call the OpenWeather API with provided lat & long
+                var response = await client.GetAsync(
+                    $"data/2.5/weather?lat={posLat}&lon={posLong}&appid={apiKey}&units=metric");
+                
+                return response.IsSuccessStatusCode 
+                    ? (200, await response.Content.ReadAsStringAsync()) 
+                    : ((int)response.StatusCode, null);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Error fetching weather data: {ex.Message}");
+                return (500, null);
+            }
         }
 
+        /// <summary>
+        /// Calculates CPU usage for the current process over a 1-second interval
+        /// </summary>
+        /// <returns>CPU usage percentage</returns>
         public static async Task<double> GetCpuUsageForProcess()
         {
             var startTime = DateTime.UtcNow;
