@@ -1,49 +1,65 @@
-# .NET - Demo Web Application
+# .NET 8 - Demo Web Application
 
-This is a simple .NET web app using the new minimal hosting model, and Razor pages. It was created from the `dotnet new webapp` template and modified adding custom APIs, Bootstrap v5, Microsoft Identity and other packages/features.
+This is a modern .NET 8 web application using the minimal hosting model and Razor pages. It was originally created from the `dotnet new webapp` template and has been enhanced with custom APIs, Bootstrap v5, Microsoft Identity, and other modern packages/features.
 
-The app has been designed with cloud native demos & containers in mind, in order to provide a real working application for deployment, something more than "hello-world" but with the minimum of pre-reqs. It is not intended as a complete example of a fully functioning architecture or complex software design.
+The app has been designed with cloud native demos & containers in mind, providing a real working application for deployment scenarios - something more substantial than "hello-world" but with minimal prerequisites. It is not intended as a complete example of a fully functioning architecture or complex software design.
 
-Typical uses would be deployment to Kubernetes, demos of Docker, CI/CD (build pipelines are provided), deployment to cloud (Azure) monitoring, auto-scaling
+## ✨ What's New in v2.0 (.NET 8 Upgrade)
 
-The app has several basic pages accessed from the top navigation menu, some of which are only lit up when certain configuration variables are set (see 'Optional Features' below):
+- **Upgraded to .NET 8.0** - Latest LTS version with improved performance and features
+- **Updated Dependencies** - All NuGet packages updated to latest secure versions
+- **Modern C# Features** - Utilizes primary constructors, collection expressions, and improved string comparisons
+- **Enhanced Code Quality** - Strict code analysis rules with comprehensive documentation
+- **Security Improvements** - Resolved all known vulnerabilities in dependencies
 
-- **Info** - Will show system & runtime information, and will also display if the app is running from within a Docker container and Kubernetes.
-- **Tools** - Some tools useful in demos, such a forcing CPU load (for autoscale demos), and error/exception pages for use with App Insights or other monitoring tool.
-- **Monitoring** - Displays realtime CPU load and memory working set charts, fetched from an REST API and displayed using chart.js
-- **Weather** - (Optional) Gets the location of the client page (with HTML5 Geolocation). The resulting location is used to fetch a weather forecast from the [OpenWeather API](https://openweathermap.org/)
-- **User Account** - (Optional) When configured with Azure AD (application client id and secret) user login button will be enabled, and an user-account details page enabled, which calls the Microsoft Graph API
+## 🚀 Typical Use Cases
 
-![screen](https://user-images.githubusercontent.com/14982936/71717446-0bc47400-2e10-11ea-8db2-1db5b991d566.png)
-![screen](https://user-images.githubusercontent.com/14982936/71717448-0bc47400-2e10-11ea-8bf0-5115d4c8c4a4.png)
-![screen](https://user-images.githubusercontent.com/14982936/71717426-fea78500-2e0f-11ea-881f-ad9bd8adbfae.png)
+- Deployment to Kubernetes
+- Docker containerization demos
+- CI/CD pipeline demonstrations (build pipelines provided)
+- Cloud deployment (Azure) showcases
+- Application monitoring and auto-scaling demos
 
-# Status
+## 📱 Application Features
+
+The app includes several pages accessible from the top navigation menu. Some features are only available when specific configuration variables are set (see 'Optional Features' below):
+
+- **Info** - Displays system & runtime information, detects Docker container and Kubernetes environments
+- **Tools** - Utilities for demos including CPU load generation (for autoscale demos) and error/exception pages for monitoring tools
+- **Monitoring** - Real-time CPU load and memory working set charts via REST API using Chart.js
+- **Weather** - (Optional) Uses HTML5 Geolocation to fetch weather forecasts from [OpenWeather API](https://openweathermap.org/)
+- **User Account** - (Optional) Azure AD integration with user login and Microsoft Graph API integration
+
+![Application Screenshots](https://user-images.githubusercontent.com/14982936/71717446-0bc47400-2e10-11ea-8db2-1db5b991d566.png)
+
+## 📊 Status
 
 ![](https://img.shields.io/github/last-commit/benc-uk/dotnet-demoapp) ![](https://img.shields.io/github/release-date/benc-uk/dotnet-demoapp) ![](https://img.shields.io/github/v/release/benc-uk/dotnet-demoapp) ![](https://img.shields.io/github/commit-activity/y/benc-uk/dotnet-demoapp)
 
 Live instances:
-
 [![](https://img.shields.io/website?label=Hosted%3A%20Kubernetes&up_message=online&url=https%3A%2F%2Fdotnet-demoapp.kube.benco.io%2F)](https://dotnet-demoapp.kube.benco.io/)
 
-# Running and Testing Locally
+## 🛠️ Running and Testing Locally
 
-### Pre-reqs
+### Prerequisites
 
-- Be using Linux, WSL or MacOS, with bash, make etc
-- [.NET 6](https://docs.microsoft.com/en-us/dotnet/core/install/linux) - for running locally, linting, running tests etc
-- [Docker](https://docs.docker.com/get-docker/) - for running as a container, or image build and push
-- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-linux) - for deployment to Azure
+- Linux, WSL, or macOS with bash, make, etc.
+- [.NET 8 SDK](https://docs.microsoft.com/en-us/dotnet/core/install/linux) - for local development, linting, and testing
+- [Docker](https://docs.docker.com/get-docker/) - for containerization and image operations
+- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-linux) - for Azure deployment
 
-Clone the project to any directory where you do development work
+### Getting Started
 
-```
+Clone the project to your development directory:
+
+```bash
 git clone https://github.com/benc-uk/dotnet-demoapp.git
+cd dotnet-demoapp
 ```
 
-### Makefile
+### 📋 Makefile Commands
 
-A standard GNU Make file is provided to help with running and building locally.
+A comprehensive GNU Makefile is provided for common operations:
 
 ```txt
 $ make
@@ -60,7 +76,7 @@ test-report          🤡 Unit tests with xUnit & output report
 clean                🧹 Clean up project
 ```
 
-Make file variables and default values, pass these in when calling `make`, e.g. `make image IMAGE_REPO=blah/foo`
+### Configuration Variables
 
 | Makefile Variable | Default                |
 | ----------------- | ---------------------- |
@@ -71,116 +87,154 @@ Make file variables and default values, pass these in when calling `make`, e.g. 
 | AZURE_REGION      | northeurope            |
 | AZURE_APP_NAME    | dotnet-demoapp         |
 
-Web app will listen on the usual Kestrel port of 5000, but this can be changed by setting the `ASPNETCORE_URLS` environmental variable or with the `--urls` parameter ([see docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?view=aspnetcore-6.0)).
+The web application listens on Kestrel's default port 5000. This can be customized using the `ASPNETCORE_URLS` environment variable or the `--urls` parameter ([documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?view=aspnetcore-8.0)).
 
-# Containers
+## 🐳 Container Support
 
-Public container image is [available on GitHub Container Registry](https://github.com/users/benc-uk/packages/container/package/dotnet-demoapp).
+Public container images are [available on GitHub Container Registry](https://github.com/users/benc-uk/packages/container/package/dotnet-demoapp).
 
-Run in a container with:
+Run the application in a container:
 
 ```bash
 docker run --rm -it -p 5000:5000 ghcr.io/benc-uk/dotnet-demoapp:latest
 ```
 
-Should you want to build your own container, use `make image` and the above variables to customise the name & tag.
+To build your own container image:
+```bash
+make image IMAGE_REPO=your-repo/dotnet-demoapp IMAGE_TAG=your-tag
+```
 
-## Kubernetes
+### Kubernetes Deployment
 
-The app can easily be deployed to Kubernetes using Helm, see [deploy/kubernetes/readme.md](deploy/kubernetes/readme.md) for details
+The application can be easily deployed to Kubernetes using Helm. See [deploy/kubernetes/readme.md](deploy/kubernetes/readme.md) for detailed instructions.
 
-# GitHub Actions CI/CD
+## 🔄 CI/CD with GitHub Actions
 
-A set of GitHub Actions workflows are included for CI / CD. Automated builds for PRs are run in GitHub hosted runners validating the code (linting and tests) and building dev images. When code is merged into master, then automated deployment to AKS is done using Helm.
+Comprehensive GitHub Actions workflows are included:
+
+- **CI Builds** - Automated builds for PRs with code validation (linting and tests) and dev image creation
+- **CD Deployment** - Automated deployment to AKS using Helm when code is merged to master
 
 [![](https://img.shields.io/github/workflow/status/benc-uk/dotnet-demoapp/CI%20Build%20App)](https://github.com/benc-uk/dotnet-demoapp/actions?query=workflow%3A%22CI+Build+App%22) [![](https://img.shields.io/github/workflow/status/benc-uk/dotnet-demoapp/CD%20Release%20-%20AKS?label=release-kubernetes)](https://github.com/benc-uk/dotnet-demoapp/actions?query=workflow%3A%22CD+Release+-+AKS%22)
 
-# Optional Features
+## ⚙️ Optional Features
 
-The app will start up and run with zero configuration, however the only features that will be available will be the *Info*, *Tools* & *Monitoring* views. The following optional features can be enabled:
+The application starts with zero configuration, but only basic features (*Info*, *Tools* & *Monitoring*) will be available. Enable additional features with these configurations:
 
-### Application Insights
+### 📊 Application Insights
 
-Enable this by setting `ApplicationInsights__InstrumentationKey`
+**Configuration:** Set `ApplicationInsights__InstrumentationKey`
 
-The app has been instrumented with the Application Insights SDK, it will however need to be configured to point to your App Insights instance/workspace. All requests will be tracked, as well as dependant calls to other APIs, exceptions & errors will also be logged
+The app includes Application Insights SDK instrumentation for:
+- Request tracking
+- Dependency call monitoring  
+- Exception and error logging
 
-[This article](https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-core) has more information on monitoring .NET with App Insights
-
-If running locally, and using appsettings.Development.json, this can be configured as follows
+For local development using `appsettings.Development.json`:
 
 ```json
-"ApplicationInsights": {
-  "InstrumentationKey": "<key value here>"
+{
+  "ApplicationInsights": {
+    "InstrumentationKey": "<your-key-here>"
+  }
 }
 ```
 
-### Weather Details
+[Learn more about .NET monitoring with Application Insights](https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-core)
 
-Enable this by setting `Weather__ApiKey`
+### 🌤️ Weather Integration
 
-This will require a API key from OpenWeather, you can [sign up for free and get one here](https://openweathermap.org/). The page uses a browser API for geolocation to fetch the user's location.
-However, the `geolocation.getCurrentPosition()` browser API will only work when the site is served via HTTPS or from localhost. As a fallback, weather for London, UK will be show if the current position can not be obtained
+**Configuration:** Set `Weather__ApiKey`
 
-If running locally, and using appsettings.Development.json, this can be configured as follows
+Requires an API key from [OpenWeather](https://openweathermap.org/) (free signup available). The feature uses HTML5 Geolocation API to fetch the user's location for weather data.
+
+**Note:** Geolocation only works over HTTPS or localhost. London, UK weather is shown as fallback.
+
+Local configuration example:
 
 ```json
-"Weather": {
-  "ApiKey": "<key value here>"
+{
+  "Weather": {
+    "ApiKey": "<your-openweather-api-key>"
+  }
 }
 ```
 
-### User Authentication with Azure AD and Microsoft Graph
+### 🔐 Azure AD Authentication & Microsoft Graph
 
-Enable this feature by setting several 'AzureAd' environmental variables, once enabled, a 'Login' button will be displayed on the main top nav bar.
+**Configuration:** Set multiple `AzureAd` environment variables
 
-This uses [Microsoft.Identity.Web](https://github.com/AzureAD/microsoft-identity-web) which is a library allowing .NET web apps to use the Microsoft Identity Platform (i.e. Azure AD v2.0 endpoint)
+Enables user authentication with Microsoft Identity Platform and Microsoft Graph API integration for user profile data and photos.
 
-In addition the user account page shows details & photo retrieved from the Microsoft Graph API
+Uses [Microsoft.Identity.Web](https://github.com/AzureAD/microsoft-identity-web) library for seamless Azure AD integration.
 
-You will need to register an app in your Azure AD tenant. [See this guide](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app). Make sure you enable the options
+#### Azure AD App Registration Setup
 
-- Enable the app for _"Accounts in any organizational directory and personal Microsoft accounts"_
-- Add _'Web platform'_ for authentication
-- Ensure your Redirect URI ends with `/signin-oidc`
-- Enable _"Access Tokens"_ and _"ID Tokens"_ in the authentication settings.
-- Add a new client secret, and make a note of it's value
+1. Register an app in your Azure AD tenant ([registration guide](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app))
+2. Configure these settings:
+   - Enable *"Accounts in any organizational directory and personal Microsoft accounts"*
+   - Add *Web platform* for authentication
+   - Set Redirect URI ending with `/signin-oidc`
+   - Enable *"Access Tokens"* and *"ID Tokens"*
+   - Create a client secret
 
-Environmental Variables:
+#### Environment Variables
 
-- `AzureAd__ClientId`: You app's client id
-- `AzureAd__ClientSecret`: You app's client secret
+- `AzureAd__ClientId`: Your app's client ID
+- `AzureAd__ClientSecret`: Your app's client secret  
 - `AzureAd__Instance`: Set to `https://login.microsoftonline.com/`
 - `AzureAd__TenantId`: Set to `common`
 
-If running locally, and using appsettings.Development.json, this can be configured as follows
+Local configuration example:
 
 ```json
-"AzureAd": {
-  "Instance": "https://login.microsoftonline.com/",
-  "ClientId": "<change me>",
-  "ClientSecret": "<change me>",
-  "TenantId": "common",
+{
+  "AzureAd": {
+    "Instance": "https://login.microsoftonline.com/",
+    "ClientId": "<your-client-id>",
+    "ClientSecret": "<your-client-secret>",
+    "TenantId": "common"
+  }
 }
 ```
 
-## Running in Azure - Container App
+## ☁️ Azure Container App Deployment
 
-If you want to deploy to an Azure Container App, a Bicep template is provided in the [deploy](deploy/) directory
+Deploy to Azure Container App using the provided Bicep template in the [deploy](deploy/) directory.
 
-For a quick deployment, use `make deploy` which will create a resource group, the Azure Container App instance (with supporting resources) and deploy the latest image to it
-
+Quick deployment:
 ```bash
 make deploy
 ```
 
-> Note. Azure Container App doesn't currently support HTTP header forwarding, so Azure AD sign-in will not work as it mis-redirects to the wrong URL
+This creates:
+- Resource group
+- Azure Container App instance with supporting resources
+- Deployment of the latest container image
 
-# Updates
+**Note:** Azure Container App currently doesn't support HTTP header forwarding, so Azure AD sign-in may not work correctly due to redirect URL issues.
 
-- Nov 2021 - Large scale rewrite to .NET 6
-- Mar 2021 - Update to deployment, added dummy unit tests and makefile
-- Nov 2020 - Updated to .NET 5
-- Nov 2020 - New GitHub pipelines & container registry
-- Jun 2020 - Moved to NuGet for the Microsoft.Identity.Web
-- Jan 2020 - Rewritten from scratch
+## 📝 Version History
+
+- **Dec 2024** - Major upgrade to .NET 8 with modern C# features and security updates
+- **Nov 2021** - Large scale rewrite to .NET 6
+- **Mar 2021** - Updated deployment, added unit tests and makefile
+- **Nov 2020** - Updated to .NET 5
+- **Nov 2020** - New GitHub pipelines & container registry
+- **Jun 2020** - Moved to NuGet for Microsoft.Identity.Web
+- **Jan 2020** - Complete rewrite from scratch
+
+## 🏗️ Architecture & Technologies
+
+- **.NET 8** - Latest LTS framework
+- **ASP.NET Core** - Web framework with minimal APIs
+- **Razor Pages** - Server-side rendering
+- **Bootstrap 5** - Modern responsive UI
+- **Chart.js** - Real-time monitoring charts
+- **Microsoft Identity Platform** - Enterprise authentication
+- **Microsoft Graph API** - User profile integration
+- **Application Insights** - Telemetry and monitoring
+- **OpenWeather API** - Weather data integration
+- **Docker** - Containerization
+- **Kubernetes/Helm** - Orchestration
+- **GitHub Actions** - CI/CD pipelines

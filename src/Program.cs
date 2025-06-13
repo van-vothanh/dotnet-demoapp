@@ -2,8 +2,17 @@
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 
+// Main entry point for the .NET Demo Application
+// This application demonstrates various .NET 8 features including:
+// - Minimal APIs
+// - Azure AD authentication (optional)
+// - Application Insights integration
+// - Weather API integration
+// - System monitoring endpoints
+
 var builder = WebApplication.CreateBuilder(args);
 
+// Add Application Insights telemetry
 builder.Services.AddApplicationInsightsTelemetry();
 
 // Make Azure AD auth an optional feature if the config is present
@@ -20,7 +29,7 @@ builder.Services.AddRazorPages().AddMicrosoftIdentityUI();
 
 var app = builder.Build();
 
-// Make Azure AD auth an optional feature if the config is present
+// Configure authentication and authorization if Azure AD is configured
 if (builder.Configuration.GetSection("AzureAd").Exists() && builder.Configuration.GetSection("AzureAd").GetValue<string>("ClientId") != "")
 {
     _ = app.UseAuthentication();
@@ -53,5 +62,5 @@ app.MapGet("/api/weather/{posLat:double}/{posLong:double}", async (double posLat
     return status == 200 ? Results.Content(data, "application/json") : Results.StatusCode(status);
 });
 
-// Easy to miss this, starting the whole app and server!
+// Start the application
 app.Run();
