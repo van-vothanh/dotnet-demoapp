@@ -8,26 +8,54 @@ using Microsoft.Graph;
 
 namespace DotnetDemoapp.Pages
 {
+    /// <summary>
+    /// Page model for displaying user information from Microsoft Graph
+    /// </summary>
     [Authorize]
-    public class UserInfoModel : PageModel
+    public class UserInfoModel(ILogger<UserInfoModel> logger, GraphServiceClient graphServiceClient) : PageModel
     {
-        private readonly ILogger<UserInfoModel> _logger;
-        private readonly GraphServiceClient _graphServiceClient;
+        private readonly ILogger<UserInfoModel> _logger = logger;
+        private readonly GraphServiceClient _graphServiceClient = graphServiceClient;
 
+        /// <summary>
+        /// Gets the username
+        /// </summary>
         public string Username { get; private set; } = "";
+
+        /// <summary>
+        /// Gets the object identifier
+        /// </summary>
         public string Oid { get; private set; } = "";
+
+        /// <summary>
+        /// Gets the display name
+        /// </summary>
         public string Name { get; private set; } = "";
+
+        /// <summary>
+        /// Gets the tenant identifier
+        /// </summary>
         public string TenantId { get; private set; } = "";
+
+        /// <summary>
+        /// Gets the preferred username
+        /// </summary>
         public string PreferredUsername { get; private set; } = "";
-        internal Dictionary<string, string> GraphData = new();
+
+        /// <summary>
+        /// Gets the Microsoft Graph data
+        /// </summary>
+        internal Dictionary<string, string> GraphData = [];
+
+        /// <summary>
+        /// Gets the user photo from Microsoft Graph
+        /// </summary>
         internal byte[] GraphPhoto;
 
-        public UserInfoModel(ILogger<UserInfoModel> logger, GraphServiceClient graphServiceClient)
-        {
-            _logger = logger;
-            _graphServiceClient = graphServiceClient;
-        }
-
+        /// <summary>
+        /// Handles GET requests to populate user information from Microsoft Graph
+        /// </summary>
+        /// <returns>The page result or redirect</returns>
         public async Task<IActionResult> OnGet()
         {
             foreach (var claim in User.Claims)
@@ -100,6 +128,11 @@ namespace DotnetDemoapp.Pages
             return Page();
         }
 
+        /// <summary>
+        /// Converts a stream to byte array
+        /// </summary>
+        /// <param name="stream">The stream to convert</param>
+        /// <returns>Byte array representation of the stream</returns>
         private static byte[] ToByteArray(Stream stream)
         {
             var length = stream.Length > int.MaxValue ? int.MaxValue : Convert.ToInt32(stream.Length);
