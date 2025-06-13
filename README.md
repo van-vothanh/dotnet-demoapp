@@ -1,8 +1,18 @@
-# .NET - Demo Web Application
+# .NET 8 - Demo Web Application
 
-This is a simple .NET web app using the new minimal hosting model, and Razor pages. It was created from the `dotnet new webapp` template and modified adding custom APIs, Bootstrap v5, Microsoft Identity and other packages/features.
+This is a simple .NET 8 web app using the minimal hosting model and Razor pages. It was created from the `dotnet new webapp` template and modified adding custom APIs, Bootstrap v5, Microsoft Identity and other packages/features.
 
 The app has been designed with cloud native demos & containers in mind, in order to provide a real working application for deployment, something more than "hello-world" but with the minimum of pre-reqs. It is not intended as a complete example of a fully functioning architecture or complex software design.
+
+## 🚀 Recent Updates
+
+- **Upgraded to .NET 8**: Modernized from .NET 6 to .NET 8 for improved performance and latest features
+- **Updated Dependencies**: All NuGet packages updated to latest compatible versions
+- **Code Modernization**: Applied C# 12 features including primary constructors and collection expressions
+- **Enhanced Code Quality**: Improved code analysis compliance and formatting
+- **Security Updates**: Updated Microsoft Identity packages to address security vulnerabilities
+
+## 📋 Features
 
 Typical uses would be deployment to Kubernetes, demos of Docker, CI/CD (build pipelines are provided), deployment to cloud (Azure) monitoring, auto-scaling
 
@@ -31,13 +41,13 @@ Live instances:
 ### Pre-reqs
 
 - Be using Linux, WSL or MacOS, with bash, make etc
-- [.NET 6](https://docs.microsoft.com/en-us/dotnet/core/install/linux) - for running locally, linting, running tests etc
+- [.NET 8](https://docs.microsoft.com/en-us/dotnet/core/install/linux) - for running locally, linting, running tests etc
 - [Docker](https://docs.docker.com/get-docker/) - for running as a container, or image build and push
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-linux) - for deployment to Azure
 
 Clone the project to any directory where you do development work
 
-```
+```bash
 git clone https://github.com/benc-uk/dotnet-demoapp.git
 ```
 
@@ -71,7 +81,24 @@ Make file variables and default values, pass these in when calling `make`, e.g. 
 | AZURE_REGION      | northeurope            |
 | AZURE_APP_NAME    | dotnet-demoapp         |
 
-Web app will listen on the usual Kestrel port of 5000, but this can be changed by setting the `ASPNETCORE_URLS` environmental variable or with the `--urls` parameter ([see docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?view=aspnetcore-6.0)).
+Web app will listen on the usual Kestrel port of 5000, but this can be changed by setting the `ASPNETCORE_URLS` environmental variable or with the `--urls` parameter ([see docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?view=aspnetcore-8.0)).
+
+## 🏗️ Building and Testing
+
+### Build the application
+```bash
+dotnet build
+```
+
+### Run tests
+```bash
+dotnet test
+```
+
+### Run locally
+```bash
+dotnet run --project src
+```
 
 # Containers
 
@@ -176,8 +203,23 @@ make deploy
 
 > Note. Azure Container App doesn't currently support HTTP header forwarding, so Azure AD sign-in will not work as it mis-redirects to the wrong URL
 
+## 📦 Dependencies
+
+### Main Application
+- **Microsoft.ApplicationInsights.AspNetCore** (2.22.0) - Application monitoring and telemetry
+- **Microsoft.Identity.Web** (3.4.0) - Azure AD authentication integration
+- **Microsoft.Identity.Web.UI** (3.4.0) - UI components for authentication
+- **Microsoft.Identity.Web.MicrosoftGraph** (3.4.0) - Microsoft Graph API integration
+
+### Test Project
+- **Microsoft.NET.Test.Sdk** (17.11.1) - Test framework SDK
+- **xunit** (2.9.2) - Unit testing framework
+- **xunit.runner.visualstudio** (2.8.2) - Visual Studio test runner
+- **coverlet.collector** (6.0.2) - Code coverage collection
+
 # Updates
 
+- **June 2025** - Upgraded to .NET 8, modernized code with C# 12 features, updated all dependencies
 - Nov 2021 - Large scale rewrite to .NET 6
 - Mar 2021 - Update to deployment, added dummy unit tests and makefile
 - Nov 2020 - Updated to .NET 5
