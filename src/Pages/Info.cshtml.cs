@@ -2,29 +2,77 @@
 
 namespace DotnetDemoapp.Pages
 {
+    /// <summary>
+    /// Page model for displaying system information including container and Kubernetes detection
+    /// </summary>
     // [Authorize]
-    public class SystemInfoModel : PageModel
+    public class SystemInfoModel(IConfiguration config) : PageModel
     {
-        private readonly IConfiguration _config;
+        private readonly IConfiguration _config = config;
 
+        /// <summary>
+        /// Gets a value indicating whether the application is running inside a container
+        /// </summary>
         public bool IsInContainer { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the application is running inside Kubernetes
+        /// </summary>
         public bool IsInKubernetes { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether Application Insights is enabled
+        /// </summary>
         public bool IsAppInsightsEnabled { get; private set; }
+
+        /// <summary>
+        /// Gets the hostname of the machine
+        /// </summary>
         public string Hostname { get; private set; } = "";
+
+        /// <summary>
+        /// Gets the operating system description
+        /// </summary>
         public string OsDesc { get; private set; } = "";
+
+        /// <summary>
+        /// Gets the operating system architecture
+        /// </summary>
         public string OsArch { get; private set; } = "";
+
+        /// <summary>
+        /// Gets the operating system version
+        /// </summary>
         public string OsVersion { get; private set; } = "";
+
+        /// <summary>
+        /// Gets the .NET framework description
+        /// </summary>
         public string Framework { get; private set; } = "";
+
+        /// <summary>
+        /// Gets the processor count
+        /// </summary>
         public string ProcessorCount { get; private set; } = "";
+
+        /// <summary>
+        /// Gets the working set memory in KB
+        /// </summary>
         public string WorkingSet { get; private set; } = "";
+
+        /// <summary>
+        /// Gets the physical memory in KB
+        /// </summary>
         public string PhysicalMem { get; private set; } = "";
-        public Dictionary<string, string> EnvVars { get; private set; } = new Dictionary<string, string>();
 
-        public SystemInfoModel(IConfiguration config)
-        {
-            _config = config;
-        }
+        /// <summary>
+        /// Gets the environment variables dictionary
+        /// </summary>
+        public Dictionary<string, string> EnvVars { get; private set; } = [];
 
+        /// <summary>
+        /// Handles GET requests and populates system information
+        /// </summary>
         public void OnGet()
         {
             // Try to discover if we're inside a container and kubernetes, doesn't work with Windows containers, but whatever
@@ -42,9 +90,9 @@ namespace DotnetDemoapp.Pages
             var fred = "kkk";
             OsDesc = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
             Console.WriteLine(fred);
-            if (OsDesc.Contains('#'))
+            if (OsDesc.Contains('#', StringComparison.OrdinalIgnoreCase))
             {
-                OsDesc = OsDesc[..OsDesc.IndexOf('#')];
+                OsDesc = OsDesc[..OsDesc.IndexOf('#', StringComparison.OrdinalIgnoreCase)];
             }
 
             // CPU stuff
@@ -65,7 +113,10 @@ namespace DotnetDemoapp.Pages
             {
                 var key = allEnv.Key.ToString();
                 // Hide some vars that we guess might contain secrets
-                if (key.ToLower().Contains("key") || key.ToLower().Contains("secret") || key.ToLower().Contains("pwd") || key.ToLower().Contains("password"))
+                if (key.Contains("key", StringComparison.OrdinalIgnoreCase) ||
+                    key.Contains("secret", StringComparison.OrdinalIgnoreCase) ||
+                    key.Contains("pwd", StringComparison.OrdinalIgnoreCase) ||
+                    key.Contains("password", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }

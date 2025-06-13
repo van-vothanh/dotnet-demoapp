@@ -2,10 +2,19 @@
 
 namespace DotnetDemoapp
 {
-    // Simple static methods to help with the API calls
-    // These could probably be made into full HTTP handlers
+    /// <summary>
+    /// Simple static methods to help with the API calls
+    /// These could probably be made into full HTTP handlers
+    /// </summary>
     public class ApiHelper
     {
+        /// <summary>
+        /// Gets weather information from OpenWeather API
+        /// </summary>
+        /// <param name="apiKey">The OpenWeather API key</param>
+        /// <param name="posLat">Latitude position</param>
+        /// <param name="posLong">Longitude position</param>
+        /// <returns>A tuple containing status code and response content</returns>
         public static async Task<(int, string)> GetOpenWeather(string apiKey, double posLat, double posLong)
         {
             // Call the OpenWeather API with provided lat & long
@@ -17,6 +26,10 @@ namespace DotnetDemoapp
             return response.IsSuccessStatusCode ? (200, await response.Content.ReadAsStringAsync()) : ((int)response.StatusCode, null);
         }
 
+        /// <summary>
+        /// Gets CPU usage percentage for the current process
+        /// </summary>
+        /// <returns>CPU usage as a percentage</returns>
         public static async Task<double> GetCpuUsageForProcess()
         {
             var startTime = DateTime.UtcNow;

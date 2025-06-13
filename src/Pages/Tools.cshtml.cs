@@ -3,12 +3,22 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DotnetDemoapp.Pages
 {
+    /// <summary>
+    /// Page model for various testing and demonstration tools
+    /// </summary>
     public class ToolsModel : PageModel
     {
+        /// <summary>
+        /// Gets the message to display to the user after an action
+        /// </summary>
         public string Message { get; private set; } = "";
 
-        // Multi purpose controller method, 
-        // Couldn't find a way to do this with routes/annotations in Razor Pages
+        /// <summary>
+        /// Multi purpose controller method for various testing actions
+        /// Couldn't find a way to do this with routes/annotations in Razor Pages
+        /// </summary>
+        /// <param name="action">The action to perform (gc, alloc, exception, load)</param>
+        /// <param name="value">Optional value parameter for certain actions</param>
         public void OnGet(string action, int value)
         {
             // Run the garbage collector
