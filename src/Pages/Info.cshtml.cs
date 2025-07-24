@@ -3,9 +3,9 @@
 namespace DotnetDemoapp.Pages
 {
     // [Authorize]
-    public class SystemInfoModel : PageModel
+    public class SystemInfoModel(IConfiguration config) : PageModel
     {
-        private readonly IConfiguration _config;
+        private readonly IConfiguration _config = config;
 
         public bool IsInContainer { get; private set; }
         public bool IsInKubernetes { get; private set; }
@@ -18,12 +18,7 @@ namespace DotnetDemoapp.Pages
         public string ProcessorCount { get; private set; } = "";
         public string WorkingSet { get; private set; } = "";
         public string PhysicalMem { get; private set; } = "";
-        public Dictionary<string, string> EnvVars { get; private set; } = new Dictionary<string, string>();
-
-        public SystemInfoModel(IConfiguration config)
-        {
-            _config = config;
-        }
+        public Dictionary<string, string> EnvVars { get; private set; } = [];
 
         public void OnGet()
         {
@@ -65,7 +60,10 @@ namespace DotnetDemoapp.Pages
             {
                 var key = allEnv.Key.ToString();
                 // Hide some vars that we guess might contain secrets
-                if (key.ToLower().Contains("key") || key.ToLower().Contains("secret") || key.ToLower().Contains("pwd") || key.ToLower().Contains("password"))
+                if (key.Contains("key", StringComparison.OrdinalIgnoreCase) ||
+                    key.Contains("secret", StringComparison.OrdinalIgnoreCase) ||
+                    key.Contains("pwd", StringComparison.OrdinalIgnoreCase) ||
+                    key.Contains("password", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
