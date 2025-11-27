@@ -1,6 +1,6 @@
 {
-  "name": "Dotnet 6",
-  "image": "mcr.microsoft.com/vscode/devcontainers/dotnet:6.0-bullseye",
+  "name": "Dotnet 8",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:8.0",
 
   // Set *default* container specific settings.json values on container create.
   "settings": {},
