@@ -9,24 +9,18 @@ using Microsoft.Graph;
 namespace DotnetDemoapp.Pages
 {
     [Authorize]
-    public class UserInfoModel : PageModel
+    public class UserInfoModel(ILogger<UserInfoModel> logger, GraphServiceClient graphServiceClient) : PageModel
     {
-        private readonly ILogger<UserInfoModel> _logger;
-        private readonly GraphServiceClient _graphServiceClient;
+        private readonly ILogger<UserInfoModel> _logger = logger;
+        private readonly GraphServiceClient _graphServiceClient = graphServiceClient;
 
         public string Username { get; private set; } = "";
         public string Oid { get; private set; } = "";
         public string Name { get; private set; } = "";
         public string TenantId { get; private set; } = "";
         public string PreferredUsername { get; private set; } = "";
-        internal Dictionary<string, string> GraphData = new();
+        internal Dictionary<string, string> GraphData = [];
         internal byte[] GraphPhoto;
-
-        public UserInfoModel(ILogger<UserInfoModel> logger, GraphServiceClient graphServiceClient)
-        {
-            _logger = logger;
-            _graphServiceClient = graphServiceClient;
-        }
 
         public async Task<IActionResult> OnGet()
         {
@@ -84,7 +78,10 @@ namespace DotnetDemoapp.Pages
                 }
                 catch (Exception e)
                 {
-                    _logger.LogWarning(e.ToString());
+                    if (_logger.IsEnabled(LogLevel.Warning))
+                    {
+                        _logger.LogWarning("{Exception}", e.ToString());
+                    }
                 }
             }
             catch (Exception)
